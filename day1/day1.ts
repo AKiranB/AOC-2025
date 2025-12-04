@@ -1,5 +1,3 @@
-import parseInput from "../parseInput";
-
 // parse strings
 // handle increments clock and counter clockwise based on instructions
 // tally number of zero positions
@@ -13,8 +11,17 @@ export function parseInstructions(instructions: string[]): { direction: string; 
     });
 }
 
-export function wrap(current: number, target: number, direction: string) {
-    const wrappedPosition = target % 100;
+export function countZeroHits(current: number, amount: number, direction: string) {
+    const distanceToZero = current === 0 ? 100 : direction === "R" ? 100 - current : current;
+    if (distanceToZero > amount) {
+        return 0;
+    }
+    const total = 1 + Math.floor((amount - distanceToZero) / 100);
+    return total;
+}
+
+export function getFinalPosition(current: number, amount: number, direction: string) {
+    const wrappedPosition = amount % 100;
     const relative = direction === "R" ? current + wrappedPosition : current - wrappedPosition;
     if (relative < 0) {
         return Math.abs(100 - Math.abs(relative));
@@ -24,17 +31,16 @@ export function wrap(current: number, target: number, direction: string) {
     return relative;
 }
 
-export function day1(input: string[]) {
+export function dayOnePartOne(input: string[]) {
     let zeroPositionCounter = 0;
     let currentPosition = 50;
     const instructions = parseInstructions(input);
 
     for (let i = 0; i < instructions.length; i++) {
         const { amount, direction } = instructions[i];
-        currentPosition = wrap(currentPosition, amount, direction);
-        if (currentPosition === 0) {
-            zeroPositionCounter++;
-        }
+        const zeroHits = countZeroHits(currentPosition, amount, direction);
+        zeroPositionCounter += zeroHits;
+        currentPosition = getFinalPosition(currentPosition, amount, direction);
     }
 
     return zeroPositionCounter;
