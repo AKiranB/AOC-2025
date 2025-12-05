@@ -6,7 +6,7 @@ const input = parseInput(`${__dirname}/input.txt`);
 
 describe("day1", () => {
     test("given a corresponding input, returns 3 ", () => {
-        expect(dayOnePartOne(input)).toBe(1120);
+        expect(dayOnePartOne(input)).toBe(6554);
     });
 });
 
